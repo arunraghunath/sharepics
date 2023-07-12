@@ -21,6 +21,11 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "<h1>Contact Page</h1><p>You may contact me at <a href=\"mailto:test@gmail.com\">myemail</a></p>")
 }
 
+func faqHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html charset=utf-8")
+	w.Write([]byte("<h1>FAQ Page</h1><p>All help you need can be found here</p>"))
+}
+
 func pathHandler(w http.ResponseWriter, r *http.Request) {
 	/*if r.URL.Path == "/" {
 		homeHandler(w, r)
@@ -36,11 +41,17 @@ func pathHandler(w http.ResponseWriter, r *http.Request) {
 		homeHandler(w, r)
 	case "/contact":
 		contactHandler(w, r)
+	case "/faq":
+		faqHandler(w, r)
 	default:
 		http.Error(w, "Page not found", 404)
 	}
 }
 
 func main() {
-	http.ListenAndServe(":2020", &Router{})
+	//http.ListenAndServe(":2020", &Router{})
+	//http.ListenAndServe(":2020", http.HandlerFunc(pathHandler))
+	var router http.HandlerFunc
+	router = pathHandler
+	http.ListenAndServe(":2020", router)
 }
