@@ -5,6 +5,13 @@ import (
 	"net/http"
 )
 
+type Router struct {
+}
+
+func (router *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	pathHandler(w, r)
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<h1>Welcome to SHarepics website!!</h1>")
 }
@@ -35,8 +42,5 @@ func pathHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	//http.HandleFunc("/", homeHandler)
-	//http.HandleFunc("/contact", contactHandler)
-	http.HandleFunc("/", pathHandler)
-	http.ListenAndServe(":2020", nil)
+	http.ListenAndServe(":2020", &Router{})
 }
