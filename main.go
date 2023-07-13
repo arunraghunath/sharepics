@@ -24,10 +24,10 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	tpl := views.Must(views.ParseFS(templates.FS, "home.html"))
+	tpl := views.Must(views.ParseFS(templates.FS, "layout-page.html", "home-page.html"))
 	router.Get("/", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.ParseFS(templates.FS, "contact.html"))
+	tpl = views.Must(views.ParseFS(templates.FS, "layout-page.html", "contact-page.html"))
 	router.Get("/contact", controllers.StaticHandler(tpl))
 
 	tpl = views.Must(views.ParseFS(templates.FS, "faq.html"))

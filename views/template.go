@@ -23,8 +23,8 @@ func Parse(file string) (t Template, err error) {
 
 }
 
-func ParseFS(fs embed.FS, file string) (t Template, err error) {
-	htmlTpl, err := template.ParseFS(fs, file)
+func ParseFS(fs embed.FS, file ...string) (t Template, err error) {
+	htmlTpl, err := template.ParseFS(fs, file...)
 	if err != nil {
 		return Template{}, fmt.Errorf("Parsing template %w", err)
 	}
