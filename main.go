@@ -2,27 +2,22 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
+	"github.com/arunraghunath/sharepics/views"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 func processTemplate(w http.ResponseWriter, htmlfile string) {
-	w.Header().Set("Content-Type", "text/html charset=utf-8")
-	ts, err := template.ParseFiles(htmlfile)
+	ts, err := views.Parse(htmlfile)
 	if err != nil {
 		log.Print(err)
 		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
 		return
 	}
-	err = ts.Execute(w, nil)
-	if err != nil {
-		log.Print(err)
-		http.Error(w, "There was an error executing the template", http.StatusInternalServerError)
-	}
+	ts.Execute(w, nil)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
