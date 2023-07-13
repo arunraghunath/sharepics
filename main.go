@@ -2,24 +2,42 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+func processTemplate(w http.ResponseWriter, htmlfile string) {
+	w.Header().Set("Content-Type", "text/html charset=utf-8")
+	ts, err := template.ParseFiles(htmlfile)
+	if err != nil {
+		log.Print(err)
+		http.Error(w, "There was an error parsing the template", http.StatusInternalServerError)
+		return
+	}
+	err = ts.Execute(w, nil)
+	if err != nil {
+		log.Print(err)
+		http.Error(w, "There was an error executing the template", http.StatusInternalServerError)
+	}
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Welcome to Sharepics website!!</h1>")
+	file := "./templates/home.html"
+	processTemplate(w, file)
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html charset=utf-8")
-	fmt.Fprint(w, "<h1>Contact Page</h1><p>You may contact me at <a href=\"mailto:test@gmail.com\">myemail</a></p>")
+	file := "./templates/contact.html"
+	processTemplate(w, file)
 }
 
 func faqHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html charset=utf-8")
-	w.Write([]byte("<h1>FAQ Page</h1><p>All help you need can be found here</p>"))
+	file := "./templates/faq.html"
+	processTemplate(w, file)
 }
 
 func urlParamHandler(w http.ResponseWriter, r *http.Request) {
