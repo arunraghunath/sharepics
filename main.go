@@ -23,22 +23,13 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	tpl, err := views.Parse("./templates/home.html")
-	if err != nil {
-		panic(err)
-	}
+	tpl := views.Must(views.Parse("./templates/home.html"))
 	router.Get("/", controllers.StaticHandler(tpl))
 
-	tpl, err = views.Parse("./templates/contact.html")
-	if err != nil {
-		panic(err)
-	}
+	tpl = views.Must(views.Parse("./templates/contact.html"))
 	router.Get("/contact", controllers.StaticHandler(tpl))
 
-	tpl, err = views.Parse("./templates/faq.html")
-	if err != nil {
-		panic(err)
-	}
+	tpl = views.Must(views.Parse("./templates/faq.html"))
 	router.Get("/faq", controllers.StaticHandler(tpl))
 
 	router.Get("/testurlparam", urlParamHandler)
