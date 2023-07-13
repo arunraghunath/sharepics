@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/arunraghunath/sharepics/controllers"
+	"github.com/arunraghunath/sharepics/templates"
 	"github.com/arunraghunath/sharepics/views"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -23,14 +24,14 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	tpl := views.Must(views.Parse("./templates/home.html"))
+	tpl := views.Must(views.ParseFS(templates.FS, "home.html"))
 	router.Get("/", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.Parse("./templates/contact.html"))
+	tpl = views.Must(views.ParseFS(templates.FS, "contact.html"))
 	router.Get("/contact", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.Parse("./templates/faq.html"))
-	router.Get("/faq", controllers.StaticHandler(tpl))
+	tpl = views.Must(views.ParseFS(templates.FS, "faq.html"))
+	router.Get("/faq", controllers.FAQ(tpl))
 
 	router.Get("/testurlparam", urlParamHandler)
 
