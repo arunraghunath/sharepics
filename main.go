@@ -36,6 +36,7 @@ func main() {
 	tpl = views.Must(views.ParseFS(templates.FS, "signup.html", "tailwind.html"))
 	user := controllers.User{Templates: controllers.Templates{New: tpl}}
 	router.Get("/signup", user.New)
+	router.Post("/signup", user.Create)
 
 	router.Get("/testurlparam", urlParamHandler)
 
