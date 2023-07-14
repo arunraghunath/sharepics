@@ -33,6 +33,9 @@ func main() {
 	tpl = views.Must(views.ParseFS(templates.FS, "faq.html", "tailwind.html"))
 	router.Get("/faq", controllers.FAQ(tpl))
 
+	tpl = views.Must(views.ParseFS(templates.FS, "signup.html", "tailwind.html"))
+	router.Get("/signup", controllers.StaticHandler(tpl))
+
 	router.Get("/testurlparam", urlParamHandler)
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
