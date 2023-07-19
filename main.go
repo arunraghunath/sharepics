@@ -51,6 +51,9 @@ func main() {
 	router.Get("/signup", user.New)
 	router.Post("/signup", user.Create)
 
+	user.Templates.SignIn = views.Must(views.ParseFS(templates.FS, "signin.html", "tailwind.html"))
+	router.Get("/signin", user.SignIn)
+
 	router.Get("/testurlparam", urlParamHandler)
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
