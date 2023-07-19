@@ -1,14 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
 	"github.com/arunraghunath/sharepics/controllers"
+	"github.com/arunraghunath/sharepics/models"
 	"github.com/arunraghunath/sharepics/templates"
 	"github.com/arunraghunath/sharepics/views"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	_ "github.com/lib/pq"
 )
 
 func urlParamHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +24,16 @@ func urlParamHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	cfg := models.DefaultPostgresConfig()
+	db, err := sql.Open("postgres", cfg.String())
+	if err != nil {
+		panic(err)
+	}
+	userService := &models.UserService{
+		DB: db,
+	}
+
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
@@ -34,7 +47,7 @@ func main() {
 	router.Get("/faq", controllers.FAQ(tpl))
 
 	tpl = views.Must(views.ParseFS(templates.FS, "signup.html", "tailwind.html"))
-	user := controllers.User{Templates: controllers.Templates{New: tpl}}
+	user := controllers.User{Templates: controllers.Templates{New: tpl}, UserService: userService}
 	router.Get("/signup", user.New)
 	router.Post("/signup", user.Create)
 

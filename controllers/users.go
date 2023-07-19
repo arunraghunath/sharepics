@@ -3,6 +3,8 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/arunraghunath/sharepics/models"
 )
 
 type Templates struct {
@@ -10,6 +12,7 @@ type Templates struct {
 }
 type User struct {
 	Templates
+	UserService *models.UserService
 }
 
 func (u User) New(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +29,12 @@ func (u User) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error while parsing the request", http.StatusBadRequest)
 		return
 	}
-	fmt.Fprintf(w, "Email Address: %s", r.PostForm.Get("email"))
-	fmt.Fprintf(w, "Password: %s", r.PostForm.Get("password"))
+	email := r.PostForm.Get("email")
+	password := r.PostForm.Get("password")
+	user, err := u.UserService.Create(email, password)
+	if err != nil {
+		http.Error(w, "something went wrong", http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintf(w, "user created %v", user)
 }
