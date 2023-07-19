@@ -53,6 +53,7 @@ func main() {
 
 	user.Templates.SignIn = views.Must(views.ParseFS(templates.FS, "signin.html", "tailwind.html"))
 	router.Get("/signin", user.SignIn)
+	router.Post("/signin", user.ProcessSignIn)
 
 	router.Get("/testurlparam", urlParamHandler)
 
