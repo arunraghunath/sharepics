@@ -70,3 +70,13 @@ func (u User) ProcessSignIn(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "User authenticated: %v", user)
 }
+
+func (u User) CurrentUser(w http.ResponseWriter, r *http.Request) {
+	email, err := r.Cookie("email")
+	if err != nil {
+		fmt.Fprintf(w, "cookie could not be read!!")
+		return
+	}
+	fmt.Fprintf(w, "Cookie value is %s", email.Value)
+	fmt.Fprintf(w, "Request header %v", r.Header)
+}

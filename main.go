@@ -55,6 +55,8 @@ func main() {
 	router.Get("/signin", user.SignIn)
 	router.Post("/signin", user.ProcessSignIn)
 
+	router.Get("/users/me", user.CurrentUser)
+
 	router.Get("/testurlparam", urlParamHandler)
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
